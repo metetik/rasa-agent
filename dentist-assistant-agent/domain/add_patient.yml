@@ -1,0 +1,54 @@
+version: "0.1"
+
+actions:
+  - create_patient_record
+
+slots:
+  add_patient_confirmation:
+    type: bool
+    mappings:
+      - type: from_llm
+  add_patient_identity_number:
+    type: text
+    mappings:
+      - type: from_llm
+  add_patient_first_name:
+    type: text
+    mappings:
+      - type: from_llm
+  add_patient_last_name:
+    type: text
+    mappings:
+      - type: from_llm
+  add_patient_age:
+    type: text
+    mappings:
+      - type: from_llm
+
+
+responses:
+  utter_ask_add_patient_confirmation:
+    - text: Do you want to add {add_patient_first_name} {add_patient_last_name} to the system?
+      buttons:
+        - payload: "/SetSlots(add_patient_confirmation=true)"
+          title: Yes
+        - payload: "/SetSlots(add_patient_confirmation=false)"
+          title: No, cancel
+  utter_ask_add_patient_first_name:
+    - text: What's the first name of the patient you want to add?
+  utter_ask_add_patient_last_name:
+    - text: What's the last name of the patient you want to add?
+  utter_ask_add_patient_identity_number:
+    - text: What's the government identity number of the patient you want to add?
+  utter_ask_add_patient_age:
+    - text: What's the age of the patient you want to add?
+  utter_patient_data_error:
+  - text: "There was an error processing the patient data. Please check the information and try again."
+  utter_patient_creation_error:
+    - text: "Something went wrong, please try again."
+  utter_add_patient_cancelled:
+    - text: "Okay, I am cancelling this adding of a patient."
+  utter_patient_already_exists:
+    - text: "There's already a patient with that identity number in the system."
+  utter_patient_added:
+    - text: "Patient added successfully."

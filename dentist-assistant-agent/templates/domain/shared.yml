@@ -1,0 +1,12 @@
+version: "3.1"
+
+slots:
+  return_value:
+    type: any
+    mappings:
+      - type: custom
+        action: add_contact
+      - type: custom
+        action: remove_contact
+      - type: custom
+        action: create_patient_record

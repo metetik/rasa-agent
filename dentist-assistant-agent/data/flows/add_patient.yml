@@ -1,0 +1,44 @@
+flows:
+  add_patient:
+    description: Add a patient to the system
+    name: add patient
+    steps:
+      - collect: "add_patient_identity_number"
+        description: "Patient's identity number"
+      - collect: "add_patient_first_name"
+        description: "Patient's first name"
+      - collect: "add_patient_last_name"
+        description: "Patient's last name"
+      - collect: "add_patient_age"
+        description: "Patient's age"
+        # required: true
+        # data_type: number
+      - collect: "add_patient_confirmation"
+        ask_before_filling: true
+        next:
+          - if: "slots.add_patient_confirmation is not true"
+            then:
+              - action: utter_add_patient_cancelled
+                next: END
+          - else: create_patient_record
+      - id: create_patient_record
+        action: create_patient_record
+        next:
+          - if: "slots.return_value == 'success'"
+            then:
+              - action: utter_patient_added
+                next: END
+          - if: "slots.return_value == 'already_exists'"
+            then:
+              - action: utter_patient_already_exists
+                next: END
+          - if: "slots.return_value == 'invalid_data'"
+            then:
+              - action: utter_patient_data_error
+                next: END
+          - else:
+            - action: utter_patient_creation_error
+              next: END
+
+actions:
+  - action_create_patient
