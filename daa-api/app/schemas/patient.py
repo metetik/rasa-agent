@@ -10,7 +10,7 @@ class PatientBase(BaseModel):
 
 
 class PatientCreate(PatientBase):
-    id: int
+    id: Optional[int] = None
 
 
 class PatientUpdate(PatientBase):

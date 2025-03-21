@@ -1,2 +1,15 @@
 .env
 daa-api/config.toml
+*/__pycache__/*
+*/.pytest_cache/*
+*/.vscode/*
+*/.idea/*
+*/.venv/*
+*/.mypy_cache/*
+*/.pytest_cache/*
+*/.coverage
+*/.coverage.*
+*/.DS_Store
+*/.ipynb_checkpoints/*
+*/.rasa/*
+*/logs/*
