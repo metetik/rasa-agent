@@ -6,7 +6,7 @@
 
 - Agent bir hasta için yeni randevu oluşturabilmelidir.
 
-- Agent oluşturulan randevuyu için hastaya eposta veya SMS yoluyla bildirim gönderilebilmelidir.
+- Agent oluşturulan randevu için hastaya eposta veya SMS yoluyla bildirim gönderilebilmelidir.
 
 - Agent hastanın geçmiş tedavilerini sorgulayabilmelidir.
 

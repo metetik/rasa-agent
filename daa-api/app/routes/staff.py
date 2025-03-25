@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from typing import List
+from typing import List, Annotated
 from sqlmodel import Session, select
 from app.database import get_session
 from app.models import Staff
@@ -202,3 +202,35 @@ async def delete_staff(staff_id: int, db_session: Session = Depends(get_session)
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error deleting staff member: {str(e)}"
         )
+
+@router.get("/staff/dentist/name/", response_model=schemas.StaffGetResponse)
+async def get_dentist_by_name(first_name: Annotated[str, "Dentist's first name"],
+                               last_name: Annotated[str, "Dentist's last name"],
+                               db_session=Depends(get_session)):
+    """
+    Retrieves a Dentist record by first and last name.
+    
+    **Parameters:**
+    - first_name (str): The first name of the Dentist to retrieve.
+    - last_name (str): The last name of the Dentist to retrieve.
+    
+    **Returns:**
+    - schemas.StaffGetResponse: The requested staff member.
+    
+    **Raises:**
+    - HTTPException: 404 Not Found if no Dentist with the given names exists.
+    - HTTPException: 500 Internal Server Error if there's a database error.
+    """
+    try:
+        dentist = db_session.query(Staff).filter(
+            Staff.first_name == first_name,
+            Staff.last_name == last_name,
+            Staff.role == "Dentist"
+        ).first()
+
+        if dentist is None:
+            raise HTTPException(status_code=404, detail="Dentist not found")
+        
+        return dentist
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

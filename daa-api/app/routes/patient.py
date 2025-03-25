@@ -4,6 +4,7 @@ from app.database import get_session
 from app.models import Patient
 from fastapi import FastAPI
 from pydantic import BaseModel
+from typing import Annotated
 
 router = APIRouter(tags=["patient"])
 
@@ -14,13 +15,13 @@ async def create_patient(patient: schemas.PatientCreate, db_session=Depends(get_
     Creates a new Patient record.
 
     **Parameters:**
-        - patient (schemas.PatientCreate): The Patient data to create.  Must include identity_number, name, surname, age.
+    - patient (schemas.PatientCreate): The Patient data to create.  Must include identity_number, name, surname, age.
 
     **Returns:**
-        - The created Patient object on success.
+    - The created Patient object on success.
 
     **Raises:**
-        - HTTPException: 400 Bad Request if the request body is invalid or if there's a database error.
+    - HTTPException: 400 Bad Request if the request body is invalid or if there's a database error.
     """
     try:
         new_patient = Patient(**patient.model_dump())
@@ -39,35 +40,35 @@ async def list_patients(db_session=Depends(get_session)):
     Retrieves a list of all Patient records.
 
     **Parameters:**
-        - None
+    - None
 
     **Returns:**
-        - A list of Patient objects on success.
+    - A list of Patient objects on success.
 
     **Raises:**
-        - HTTPException: 500 Internal Server Error if there's a database error.
+    - HTTPException: 500 Internal Server Error if there's a database error.
     """
     try:
-        patient = db_session.query(Patient).all()
-        return patient
+        patients = db_session.query(Patient).all()
+        return patients
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.get("/patient/{patient_id}", response_model=schemas.PatientGetResponse)
-async def read_patient(patient_id: int, db_session=Depends(get_session)):
+async def get_patient_by_id(patient_id: int, db_session=Depends(get_session)):
     """
     Retrieves a single Patient record by ID.
 
     **Parameters:**
-        - patient_id (int): The ID of the Patient to retrieve.
+    - patient_id (int): The ID of the Patient to retrieve.
 
     **Returns:**
-        - The Patient object on success.
+    - The Patient object on success.
 
     **Raises:**
-        - HTTPException: 404 Not Found if the Patient with the given ID does not exist.
-        - HTTPException: 500 Internal Server Error if there's a database error.
+    - HTTPException: 404 Not Found if the Patient with the given ID does not exist.
+    - HTTPException: 500 Internal Server Error if there's a database error.
     """
     try:
         patient = db_session.query(Patient).filter(Patient.id == patient_id).first()
@@ -78,21 +79,54 @@ async def read_patient(patient_id: int, db_session=Depends(get_session)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@router.get("/patient/name/", response_model=schemas.PatientGetResponse)
+async def get_patient_by_name(first_name: Annotated[str, "Patient's first name"], 
+                            last_name: Annotated[str, "Patient's last name"],
+                            db_session=Depends(get_session)):
+    """
+    Retrieves a Patient record by first and last name.
+
+    **Parameters:**
+    - first_name (str): The first name of the Patient to retrieve.
+    - last_name (str): The last name of the Patient to retrieve.
+
+    **Returns:**
+    - The Patient object on success.
+
+    **Raises:**
+    - HTTPException: 404 Not Found if no Patient with the given names exists.
+    - HTTPException: 500 Internal Server Error if there's a database error.
+    """
+    try:
+        patient = db_session.query(Patient).filter(
+            Patient.first_name == first_name,
+            Patient.last_name == last_name
+        ).first()
+
+        if patient is None:
+            raise HTTPException(status_code=404, detail="Patient not found")
+
+        return patient
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.put("/patient/{patient_id}", response_model=schemas.PatientGetResponse)
 async def update_patient(patient_id: int, patient: schemas.PatientUpdate, db_session=Depends(get_session)):
     """
     Updates an existing Patient record.
 
     **Parameters:**
-        - patient_id (int): The ID of the Patient to update.
-        - patient (schemas.PatientUpdate): The updated Patient data.
+    - patient_id (int): The ID of the Patient to update.
+    - patient (schemas.PatientUpdate): The updated Patient data.
 
     **Returns:**
-        - The updated Patient object on success.
+    - The updated Patient object on success.
 
     **Raises:**
-        - HTTPException: 404 Not Found if the Patient with the given ID does not exist.
-        - HTTPException: 400 Bad Request if the request body is invalid or if there's a database error.
+    - HTTPException: 404 Not Found if the Patient with the given ID does not exist.
+    - HTTPException: 400 Bad Request if the request body is invalid or if there's a database error.
     """
     try:
         existing_patient = db_session.query(Patient).filter(Patient.id == patient_id).first()
@@ -117,14 +151,14 @@ async def delete_patient(patient_id: int, db_session=Depends(get_session)):
     Deletes a Patient record.
 
     **Parameters:**
-        - patient_id (int): The ID of the Patient to delete.
+    - patient_id (int): The ID of the Patient to delete.
 
-    **Returns:**
-        - None on success.
+    **Returns:**   
+    - None on success.
 
     **Raises:**
-        - HTTPException: 404 Not Found if the Patient with the given ID does not exist.
-        - HTTPException: 500 Internal Server Error if there's a database error.
+    - HTTPException: 404 Not Found if the Patient with the given ID does not exist.
+    - HTTPException: 500 Internal Server Error if there's a database error.
     """
     try:
         patient = db_session.query(Patient).filter(Patient.id == patient_id).first()

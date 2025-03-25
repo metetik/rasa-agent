@@ -57,9 +57,9 @@ class Appointment(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     patient_id: int = Field(foreign_key="patient.id")
     dentist_id: int = Field(foreign_key="staff.id")
-    description: str
-    start_date: datetime
-    end_date: datetime
+    description: Optional[str] = None
+    start_date: Optional[datetime] = None
+    end_date: Optional[datetime] = None
     completed: bool = False
     patient: Optional[Patient] = Relationship(back_populates="appointments")
     dentist: Optional[Staff] = Relationship(back_populates="appointments")

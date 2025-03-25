@@ -1,0 +1,61 @@
+# TODO: Optional variables
+# TODO: Handle datetime. Example : 01.01.2025 00:00 or tomorrow 11 am
+# TODO: If dentist is not available suggest a new dentist or suggest a new datetime
+flows:
+  create_appointment:
+    description: Create a appointment for a patient. And save it to the system
+    name: create appointment
+    steps:
+      - collect: "create_appointment_patient_first_name"
+        description: "Patient's first name"
+      - collect: "create_appointment_patient_last_name"
+        description: "Patient's last name"
+      - collect: "create_appointment_dentist_first_name"
+        description: "Dentist's first name"
+      - collect: "create_appointment_dentist_last_name"
+        description: "Dentist's last name"
+      - collect: "create_appointment_start_date"
+        description: "Appointment's start date and time"
+      # - collect: "create_appointment_patient_identity_number"
+      #   description: "Patient's identity number"
+      # - collect: "create_appointment_description"
+      #   description: "Appointment's description"
+      # - collect: "create_appointment_end_date"
+      #   description: "Appointment's end date"
+      - collect: "create_appointment_confirmation"
+        ask_before_filling: true
+        next:
+          - if: "slots.create_appointment_confirmation is not true"
+            then:
+              - action: utter_create_appointment_cancelled
+                next: END
+          - else: create_appointment
+      - id: create_appointment
+        action: create_appointment
+        next:
+          - if: "slots.return_value == 'success'"
+            then:
+              - action: utter_appointment_created
+                next: END
+          - if: "slots.return_value == 'patient_not_found'"
+            then:
+              - action: utter_patient_not_found
+                next: END
+          - if: "slots.return_value == 'dentist_not_found'"
+            then:
+              - action: utter_dentist_not_found
+                next: END
+          - if: "slots.return_value == 'dentist_unavailable'"
+            then:
+            - action: utter_dentist_unavailable
+              next: END
+          - if: "slots.return_value == 'invalid_data'"
+            then:
+              - action: utter_appointment_data_error
+                next: END
+          - else:
+            - action: utter_appointment_creation_error
+              next: END
+
+actions:
+  - action_create_appointment

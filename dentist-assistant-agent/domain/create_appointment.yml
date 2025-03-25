@@ -1,0 +1,84 @@
+version: "0.1"
+
+actions:
+  - create_appointment
+
+slots:
+  create_appointment_confirmation:
+    type: bool
+    mappings:
+      - type: from_llm
+  create_appointment_patient_first_name:
+    type: text
+    mappings:
+      - type: from_llm
+  create_appointment_patient_last_name:
+    type: text
+    mappings:
+      - type: from_llm
+  create_appointment_dentist_first_name:
+    type: text
+    mappings:
+      - type: from_llm
+  create_appointment_dentist_last_name:
+    type: text
+    mappings:
+      - type: from_llm
+  create_appointment_start_date:
+    type: text
+    mappings:
+      - type: from_llm
+  # create_appointment_patient_identity_number:
+  #   type: text
+  #   mappings:
+  #     - type: from_llm
+  # create_appointment_description:
+  #   type: text
+  #   mappings:
+  #     - type: from_llm
+  # create_appointment_end_date:
+  #   type: text
+  #   mappings:
+  #     - type: from_llm
+
+responses:
+  utter_ask_create_appointment_confirmation:
+    - text: >
+        Are you sure you want to schedule an appointment for {create_appointment_patient_first_name} 
+        {create_appointment_patient_last_name} with Dr. {create_appointment_dentist_first_name} 
+        {create_appointment_dentist_last_name} on {create_appointment_start_date}?
+      buttons:
+        - payload: "/SetSlots(create_appointment_confirmation=true)"
+          title: Yes
+        - payload: "/SetSlots(create_appointment_confirmation=false)"
+          title: No, cancel
+  utter_ask_create_appointment_patient_first_name:
+    - text: What is the patient's first name?
+  utter_ask_create_appointment_patient_last_name:
+    - text: What is the patient's last name?
+  utter_ask_create_appointment_dentist_first_name:
+    - text:  What is the doctor's first name?
+  utter_ask_create_appointment_dentist_last_name:
+    - text: What is the doctor's last name?
+  utter_ask_create_appointment_start_date:
+    - text: What's the start date of appointment?
+  # utter_ask_create_appointment_patient_identity_number:
+  #   - text: Could you please provide the patient's identity number?
+  # utter_ask_create_appointment_description:
+  #   - text: Is there anything specific you'd like to note down for the appointment?
+  # utter_ask_create_appointment_end_date:
+  #   - text: What is the desired end date for the appointment?
+  utter_patient_not_found:
+    - text: "Sorry, couldn't find a patient with that information. Please double-check the details you provided."
+  utter_dentist_not_found:
+    - text: "Sorry, couldn't find a dentist with that information. Please double-check the details you provided."
+  utter_appointment_data_error:
+    - text: "There was an error processing the appointment data. Please check the information and try again."
+  utter_dentist_unavailable:
+    - text: "Unfortunately, the dentist is not available at that time.  Let me check for other dates and times.  Would you like me to do that?"
+  utter_appointment_creation_error:
+    - text: "Something went wrong, please try again."
+  utter_create_appointment_cancelled:
+    - text: "Okay, I'm cancelling the appointment creation. "
+  utter_appointment_created:
+    - text: "Your appointment has been successfully scheduled!"

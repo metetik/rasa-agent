@@ -1,0 +1,8 @@
+test_cases:
+  - test_case: user scedhules a new appointment
+    steps:
+    - user: "I want to schedule a appointment for Mehmet  Yılmaz with Dr. Ahmet  Çelik on 25.03.2025 at 13.25"
+    - utter: utter_ask_create_appointment_confirmation
+    - user: "/SetSlots(create_appointment_confirmation=true)"
+    - utter: utter_dentist_unavailable
+    - utter: utter_can_do_something_else

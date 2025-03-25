@@ -16,25 +16,28 @@ def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
 
 def populate_tables():
+    # TODO: Create appointment
     try:
         with Session(engine) as session:
             # Create staff members
-            staff1 = Staff(first_name="Dr. Ali", last_name="Veli", role="Dentist")
-            staff2 = Staff(first_name="Ayşe", last_name="Demir", role="Assistant")
-            session.add_all([staff1, staff2])
+            staff1 = Staff(first_name="Olivia", last_name="Jones", role="Dentist")
+            staff2 = Staff(first_name="Ethan", last_name="Brown", role="Assistant")
+            staff3 = Staff(first_name="William", last_name="White", role="Dentist")
+            staff4 = Staff(first_name="Chloe", last_name="Taylor", role="Assistant")
+            session.add_all([staff1, staff2, staff3, staff4])
             session.commit()
 
             # Create patients
             patient1 = Patient(
                 identity_number="1234567890",
-                first_name="Mehmet",
-                last_name="Yılmaz",
+                first_name="Michael",
+                last_name="Evans",
                 age=30
             )
             patient2 = Patient(
                 identity_number="9876543210",
-                first_name="Fatma",
-                last_name="Özdemir",
+                first_name="Grace",
+                last_name="Thompson",
                 age=45
             )
             session.add_all([patient1, patient2])

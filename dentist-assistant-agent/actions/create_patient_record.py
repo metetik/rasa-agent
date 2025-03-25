@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Text
 from rasa_sdk import Action, Tracker
 from rasa_sdk.events import SlotSet
 from rasa_sdk.executor import CollectingDispatcher
-from actions.patient_services import add_patient, get_patients, Patient 
+from actions.services.patient_services import add_patient, get_patients, Patient 
 
 class CreatePatientRecord(Action):
     def name(self) -> str:
@@ -12,7 +12,7 @@ class CreatePatientRecord(Action):
     def run(
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[str, Any]
     ) -> List[Dict[Text, Any]]:
-        patients = get_patients() # TODO: Sender Id?
+        patients = get_patients()
         patient_identity_number = tracker.get_slot("add_patient_identity_number")
         patient_first_name = tracker.get_slot("add_patient_first_name")
         patient_last_name = tracker.get_slot("add_patient_last_name")
