@@ -29,7 +29,7 @@ def build_confirmation_message(patient_first_name, patient_last_name, patient_ap
         dentist_last_name = dentist_obj["last_name"]
 
         start_date = appointment["start_date"]
-        end_date = f" - {appointment['end_date']}" if appointment["end_date"] is not None else appointment["end_date"]
+        end_date = f" - {appointment['end_date']}" if appointment["end_date"] is not None else ""
 
         message_content += f"- At {start_date}{end_date} with Dt. {dentist_first_name} {dentist_last_name} .\n"
 

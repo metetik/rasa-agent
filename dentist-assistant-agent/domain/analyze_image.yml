@@ -1,0 +1,55 @@
+version: "0.1"
+
+actions:
+  - analyze_image
+
+slots:
+  analyze_image_confirmation:
+    type: bool
+    mappings:
+      - type: from_llm
+  analyze_image_patient_first_name:
+    type: text
+    mappings:
+      - type: from_llm
+  analyze_image_patient_last_name:
+    type: text
+    mappings:
+      - type: from_llm
+  analyze_image_image_url:
+    type: text
+    mappings:
+      - type: from_llm
+  analyze_image_instruction:
+    type: text
+    mappings:
+      - type: from_llm
+  image_analysis:
+    type: text
+  
+responses:
+  utter_ask_analyze_image_confirmation:
+    - text: "Are you sure you want to proceed with the image analysis?"
+      buttons:
+        - payload: "/SetSlots(analyze_image_confirmation=true)"
+          title: Yes
+        - payload: "/SetSlots(analyze_image_confirmation=false)"
+          title: No, cancel
+  utter_ask_analyze_image_patient_first_name:
+    - text: "What is the patient's first name?"
+  utter_ask_analyze_image_patient_last_name:
+    - text: "What is the patient's last name?"
+  utter_ask_analyze_image_image_url:
+    - text: "Please provide the URL of the image you want to analyze."
+  utter_ask_analyze_image_instruction:
+    - text: "Please provide any specific instructions or notes you're looking for in the image analysis."
+  utter_analyze_image_patient_not_found:
+    - text: "Sorry, couldn't find a patient with that information. Please double-check the details you provided."
+  utter_analyze_image_error:
+    - text: "There was an error analyzing the image. Please check the information and try again."
+  utter_analyze_image_cancelled:
+    - text: "Okay, I'm cancelling the image analysis."
+  utter_image_analysis_report:
+    - text: >
+        Your image analysis report is:
+        {image_analysis}

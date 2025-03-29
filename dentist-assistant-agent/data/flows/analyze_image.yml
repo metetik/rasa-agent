@@ -1,0 +1,38 @@
+flows:
+  analyze_image:
+    description: Analyze the medical image that user provided
+    name: analyze image
+    steps:
+      - collect: "analyze_image_patient_first_name"
+        description: "Patient's first name"
+      - collect: "analyze_image_patient_last_name"
+        description: "Patient's last name"
+      - collect: "analyze_image_image_url"
+        description: A URL pointing to the medical image to be analyzed.  
+      - collect: "analyze_image_instruction"
+        description: Any specific instructions or notes the user wants to provide regarding the image analysis."
+      - collect: "analyze_image_confirmation"
+        ask_before_filling: true
+        next:
+          - if: "slots.analyze_image_confirmation is not true"
+            then:
+              - action: utter_analyze_image_cancelled
+                next: END
+          - else: analyze_image
+      - id: analyze_image
+        action: analyze_image
+        next:
+          - if: "slots.return_value == 'success'"
+            then:
+              - action: utter_image_analysis_report
+                next: END
+          - if: "slots.return_value == 'patient_not_found'"
+            then:
+              - action: utter_analyze_image_patient_not_found
+                next: END
+          - else:
+            - action: utter_analyze_image_error
+              next: END
+
+actions:
+  - action_analyze_image
