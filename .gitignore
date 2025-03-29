@@ -14,3 +14,4 @@ daa-api/config.toml
 **/.rasa/*
 **/logs/*
 duckling-srv/*
+**/app_config.toml

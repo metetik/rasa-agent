@@ -1,7 +1,7 @@
 from sqlmodel import create_engine, Session, SQLModel
 from sqlalchemy.orm import sessionmaker
 from app.config import get_database_url
-from app.models import Staff, Patient, Agent, TreatmentPlan, Treatment, PaymentPlan, Payment, Image, Notification, TreatmentNotes
+from app.models import Staff, Patient, Appointment, Agent, TreatmentPlan, Treatment, PaymentPlan, Payment, Image, Notification, TreatmentNotes
 from datetime import datetime, timedelta
 
 
@@ -16,7 +16,6 @@ def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
 
 def populate_tables():
-    # TODO: Create appointment
     try:
         with Session(engine) as session:
             # Create staff members
@@ -46,6 +45,18 @@ def populate_tables():
             # Create an agent
             agent1 = Agent(name="AI Assistant", model="gemma3")
             session.add(agent1)
+            session.commit()
+
+            # Create an appointment
+            appointment1 = Appointment(
+                patient_id=patient1.id,
+                dentist_id=staff1.id,
+                description="Dental checkup",
+                start_date=datetime(2025, 1, 1, 12, 0),
+                end_date=datetime(2025, 1, 1, 13, 0),
+                completed=False
+            )
+            session.add(appointment1)
             session.commit()
 
             # Create a treatment plan
@@ -130,3 +141,6 @@ def populate_tables():
         print(f"Error populating tables: {str(e)}")
         session.rollback()
         raise
+
+def drop_tables():
+    SQLModel.metadata.drop_all(engine)

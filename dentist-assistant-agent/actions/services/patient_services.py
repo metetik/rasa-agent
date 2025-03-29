@@ -28,7 +28,7 @@ def add_patient(patient: Patient):
         return False
 
 
-def find_patient(first_name: str, last_name: str, identity_number: str):
+def find_patient(first_name: str, last_name: str, identity_number: str | None):
     response = requests.get(f"{API_BASE}/patient/name/", params={"first_name": first_name, "last_name": last_name})
 
     if response.status_code == 200:

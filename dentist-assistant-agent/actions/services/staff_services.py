@@ -15,3 +15,11 @@ def find_dentist(first_name: str, last_name: str):
         return response.json()
     else:
         return None
+
+def get_dentist_by_id(dentist_id: int):
+    response = requests.get(f"{API_BASE}/staff/{dentist_id}")
+
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return None

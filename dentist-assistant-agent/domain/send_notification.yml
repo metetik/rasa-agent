@@ -1,0 +1,43 @@
+version: "0.1"
+
+actions:
+  - send_notification
+
+slots:
+  send_notification_confirmation:
+    type: bool
+    mappings:
+      - type: from_llm
+  send_notification_patient_first_name:
+    type: text
+    mappings:
+      - type: from_llm
+  send_notification_patient_last_name:
+    type: text
+    mappings:
+      - type: from_llm
+  
+responses:
+  utter_ask_send_notification_confirmation:
+    - text: >
+        Are you sure you want to send a notification to {send_notification_patient_first_name} 
+        {send_notification_patient_last_name} about the appointment?
+      buttons:
+        - payload: "/SetSlots(send_notification_confirmation=true)"
+          title: Yes
+        - payload: "/SetSlots(send_notification_confirmation=false)"
+          title: No, cancel
+  utter_ask_send_notification_patient_first_name:
+    - text: "What is the patient's first name?"
+  utter_ask_send_notification_patient_last_name:
+    - text: "What is the patient's last name?"
+  utter_send_notification_patient_not_found:
+    - text: "Sorry, couldn't find a patient with that information. Please double-check the details you provided."
+  utter_appointment_not_found:
+    - text: "Sorry, couldn't find an appointment for this patient. Please double-check the details you provided."
+  utter_send_notification_error:
+    - text: "There was an error sending the notification. Please check the information and try again."
+  utter_send_notification_cancelled:
+    - text: "Okay, I'm cancelling the notification sending."
+  utter_notification_sent:
+    - text: "The notification has been successfully sent!"

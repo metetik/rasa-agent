@@ -23,6 +23,21 @@ def get_appointments():
         return []
 
 
+def get_appointments_by_patient(patient_id: int):
+    """
+    Retrieves all appointments for a specific patient.
+    Args:
+        patient_id: ID of the patient.
+    Returns:
+        A list of Appointment objects.
+    """
+    response = requests.get(f"{API_BASE}/appointment/patient/{patient_id}")
+
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return []
+
 def add_appointment(appointment: Appointment):
     payload = appointment.dict()
 

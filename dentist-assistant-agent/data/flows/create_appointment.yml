@@ -1,5 +1,4 @@
 # TODO: Optional variables
-# TODO: Handle datetime. Example : 01.01.2025 00:00 or tomorrow 11 am
 # TODO: If dentist is not available suggest a new dentist or suggest a new datetime
 flows:
   create_appointment:
