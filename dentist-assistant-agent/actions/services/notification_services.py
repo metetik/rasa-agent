@@ -41,19 +41,16 @@ def send_sms(sms_to, sms_from, sms_content):
     account_sid = config["TWILIO_SID"]
     auth_token = config["TWILIO_TOKEN"]
 
-    # client = Client(account_sid, auth_token)
+    client = Client(account_sid, auth_token)
 
-    # message = client.messages.create(
-    #     body=sms_content,
-    #     from_=sms_from,
-    #     to=sms_to,
-    # )
+    message = client.messages.create(
+        body=sms_content,
+        from_=sms_from,
+        to=sms_to,
+    )
     print(f"SMS sent to {sms_to} from {sms_from}: \n{sms_content}")
 
-    # return message.error_code is None
-
-    return True
-
+    return message.error_code is None
 
 def send_email(email_to, email_subject, email_content):
     return True

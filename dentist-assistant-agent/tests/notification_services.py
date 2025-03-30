@@ -1,4 +1,4 @@
-from actions.services.confirmation_services import send_sms, get_config
+from actions.services.notification_services import send_sms, get_config
 try:
     import tomllib
 except ModuleNotFoundError:

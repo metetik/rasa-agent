@@ -6,7 +6,7 @@ from rasa_sdk.events import SlotSet
 from rasa_sdk.executor import CollectingDispatcher
 from actions.services.patient_services import find_patient
 from actions.services.appointment_services import get_appointments_by_patient
-from actions.services.confirmation_services import get_config, send_sms, build_confirmation_message
+from actions.services.notification_services import get_config, send_sms, build_confirmation_message
 
 class SendNotification(Action):
     def name(self) -> str:
