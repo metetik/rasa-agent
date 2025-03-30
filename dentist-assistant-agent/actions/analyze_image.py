@@ -26,12 +26,15 @@ class AnalyzeImage(Action):
 
         print("Image analysis result:", image_analysis)
 
-        dispatcher.utter_message(
-            response="utter_image_analysis_report",
-            image_analysis=image_analysis
-        )
+        # dispatcher.utter_message(
+        #     response="utter_image_analysis_report",
+        #     image_analysis=image_analysis
+        # )
             
         if image_analysis is not None:
-            return [SlotSet("return_value", "success")]
+            return [
+                SlotSet("image_analysis", image_analysis),
+                SlotSet("return_value", "success")
+            ]
         else:
             return [SlotSet("return_value", "failed")]
