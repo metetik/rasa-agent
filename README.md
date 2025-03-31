@@ -31,5 +31,6 @@
 3. Start Duckling  server: `start_duckling.sh`
 4. Start Agent
 	1. `source /workspaces/rasa-agent/.env`
-	2. `cd /workspaces/rasa-agent/dentist-assistant-agent/`
-	3. `rasa inspect`
+	2. `source /home/codespace/.rasa-agent-venv/bin/activate`
+	3. `cd /workspaces/rasa-agent/dentist-assistant-agent/`
+	4. `rasa inspect`
